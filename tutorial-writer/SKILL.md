@@ -54,7 +54,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
     ↓
 规划截图位与画板图（按 screenshot-guide.md 和 feishu-format.md 规则）
     ↓
-规划 img2.0 插图位与生图提示词文档（按 image-illustration.md 规则）
+规划 img2.0 插图位、生图模型检测与提示词文档（按 image-illustration.md 规则）
     ↓
 生成 DocxXML 富文本正文（按 feishu-format.md 规范）
     ↓
@@ -126,6 +126,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - [ ] 配图位已标注（不生成图，只标注位置和描述）
 - [ ] 至少 1 个画板类图已规划，且说明图类型、层级、节点和视觉要求；图表类型与内容匹配
 - [ ] 已判断是否需要 img2.0 插图；需要时已规划插入位置、教学目的、图片提示词和本地资产路径
+- [ ] 如需生图，已完成生图模型能力检测：支持内置 img2.0 则直接生成；不支持或不是目标模型时，已走独立生图 API 配置
 - [ ] 如规划了 img2.0 图片，已在制作过程中实际生成图片并完成自检；提示词文档只用于追溯，不把生成任务留给用户
 - [ ] 已生成独立的 img2.0 生图提示词文档；如实际发布，提示词文档也作为独立文档或附件交付
 - [ ] 对比内容使用表格、分栏、对比图或高亮块显著显示
