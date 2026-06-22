@@ -52,6 +52,8 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
     ↓
 按 writing-rules.md 逐条改写语言
     ↓
+规划互动作业卡与学习打卡组件（按 participation.md 规则）
+    ↓
 规划截图位与画板图（按 screenshot-guide.md 和 feishu-format.md 规则）
     ↓
 规划 img2.0 插图位、生图模型检测与提示词文档（按 image-illustration.md 规则）
@@ -79,6 +81,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - 选教程骨架时，读 `references/tutorial-structure.md`
 - 规划知识逻辑链、联网补充、过渡和解释深度时，读 `references/content-depth.md`
 - 改写语言时，读 `references/writing-rules.md`
+- 规划作业互动、章节打卡、参与确认和进度展示时，读 `references/participation.md`
 - 标注配图位时，读 `references/screenshot-guide.md`
 - 规划 img2.0 生成图、提示词文档和飞书插入位置时，读 `references/image-illustration.md`
 - 输出飞书云文档或飞书草稿前，读 `references/feishu-format.md`
@@ -136,6 +139,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - [ ] 飞书正文不是普通 Markdown 导入，必须能看到高亮块、表格、代码块、检查项、分栏/画板等富文本块
 - [ ] 场外文档出处置顶
 - [ ] 练习可在 5 分钟内验证
+- [ ] 作业区使用高亮块、checkbox、任务清单或表格呈现；需要时已加入“我已参与 / 已完成”打卡组件和进度展示
 - [ ] 至少一个讨论节点
 - [ ] 实操作业（如章节需要）：任务 + 现成材料（prompt/命令/模板），可直接复制使用
 - [ ] 返回的是 `/docx/` 云文档链接，并用 `docs +fetch --api-version v2` 验证标题和富文本块存在

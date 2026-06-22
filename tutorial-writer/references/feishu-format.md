@@ -174,6 +174,33 @@ Callout 块不放正文步骤。正文应脱离 Callout 仍能独立阅读。
 
 表格不超过 4 列。超过用折叠块 + 分段表格。
 
+### 2.1 互动作业与学习打卡
+
+作业、练习、章节参与确认不应只是普通文字。优先使用 `participation.md` 中的互动作业卡和学习打卡组件。
+
+DocxXML 基础形态：
+
+```xml
+<callout emoji="📝" background-color="light-blue" border-color="blue">
+  <p><b>本节作业</b></p>
+  <checkbox done="false">我已经完成本节阅读</checkbox>
+  <checkbox done="false">我完成了 5 分钟练习</checkbox>
+  <checkbox done="false">我把结果截图发到群里</checkbox>
+</callout>
+```
+
+如果需要展示参与进度，但当前飞书文档不支持真实按钮或头像墙，用占位区表达：
+
+```xml
+<callout emoji="✅" background-color="light-green" border-color="green">
+  <p><b>我已参与</b></p>
+  <p>点击或勾选上方任务后，讲师可在这里汇总参与进度。</p>
+  <p>[参与头像区：已参与学员头像 / 名单由飞书互动块或 Base 统计同步]</p>
+</callout>
+```
+
+不要伪造头像、名单或参与人数。无法自动统计时，明确标注为占位或需要接入 Base / 表格统计。
+
 ### 3. 代码块
 
 以下内容必须放入代码块，不混在正文段落中：
