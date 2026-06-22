@@ -26,6 +26,12 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 收到教程主题后，按以下流程执行：
 
 ```
+弹出模式选择：教程生成 / 需求梳理 / 参考飞书链接学习 / 自定义模式
+    ↓
+问答澄清真实需求，并生成初级需求汇总
+    ↓
+用户确认或修正需求汇总与模式
+    ↓
 判断教程范围：单节 / 小合集 / 整套课程
     ↓
 规划飞书承载方式：单文档 / 多文档 / Wiki 知识库
@@ -68,6 +74,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 
 ## 需要加载的 reference
 
+- 启动任务、弹出模式选择、问答澄清需求、学习参考飞书链接时，读 `references/intake-and-mode.md`
 - 判断教程范围、章节部署和飞书承载方式时，读 `references/course-planning.md`
 - 选教程骨架时，读 `references/tutorial-structure.md`
 - 规划知识逻辑链、联网补充、过渡和解释深度时，读 `references/content-depth.md`
@@ -97,6 +104,9 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 ## 输出检查清单
 
 每篇教程输出前，确认：
+- [ ] 正式写教程前已弹出模式选择，让用户选择教程生成 / 需求梳理 / 参考飞书链接学习 / 自定义模式
+- [ ] 已通过问答整理初级需求汇总：目标成果、痛点、受众、材料、交付形态、参考样式、验收标准
+- [ ] 若用户提供优质飞书教程链接，已读取并抽取结构、排版、图文节奏和可复用模式；未能读取时已说明原因
 - [ ] 已判断教程形态：单节 / 小合集 / 整套课程，并说明理由
 - [ ] 已规划承载方式：单文档 / 多文档 / Wiki 知识库，并说明理由
 - [ ] 已规划章节与小节部署；如果是合集或课程，先有总框架再写小节

@@ -1,4 +1,4 @@
 interface:
   display_name: "Tutorial Writer"
   short_description: "Generate classroom-ready Feishu tutorials"
-  default_prompt: "Use $tutorial-writer to turn these knowledge-base notes into a classroom-ready Feishu tutorial draft."
+  default_prompt: "Use $tutorial-writer to clarify my tutorial needs, choose a mode, and create a classroom-ready Feishu tutorial."
