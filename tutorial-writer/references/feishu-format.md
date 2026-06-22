@@ -189,13 +189,14 @@ DocxXML 基础形态：
 </callout>
 ```
 
-当前 DocxXML 支持 `<button>`，但只适合打开链接、复制页面或关注页面；不要把它当成会自动记录点击人的打卡按钮。如果需要展示真实参与进度或头像墙，接入 Base / 表格 / 表单，并在文档里放入口按钮和占位区：
+当前 DocxXML 支持 `<button>`，但只适合打开链接、复制页面或关注页面；不要把它当成会自动记录点击人的打卡按钮。文档内 checkbox 只能作为学习引导或共享检查项；同一份文档里，一个人勾选后其他人也会看到变化。如果需要展示真实参与进度或头像墙，接入 Base / 表格 / 表单，并在文档里放入口按钮和占位区。单人学习场景可以提供 `DuplicatePage` 按钮，让学员复制个人副本后再勾选：
 
 ```xml
 <callout emoji="✅" background-color="light-green" border-color="green">
   <p><b>我已参与</b></p>
   <checkbox done="false">我已完成本节学习和练习。</checkbox>
   <p><button action="OpenLink" src="https://example.com">打开打卡表</button></p>
+  <p><button action="DuplicatePage" src="https://example.com">复制个人学习副本</button></p>
   <p>当前进度：由讲师在 Base / 表格中统计。</p>
   <p>[参与头像区占位：接入 Base 人员字段后展示已参与学员名单或头像]</p>
 </callout>

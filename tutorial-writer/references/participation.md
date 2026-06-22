@@ -74,6 +74,8 @@ DocxXML 示例：
 - 不要把 `<button>` 写成“点击后自动登记当前学员已参与”的按钮。
 - 不要承诺 Docx 文档内有原生头像墙、点击计数、实时参与人墙。
 - 如果需要真实参与记录、人员头像、人数统计和进度汇总，默认接入飞书 Base / 表格 / 表单。
+- 文档内 checkbox 只能作为学习引导或共享检查项；同一份文档里，一个人勾选后其他人也会看到变化，不能把它当成每个学员独立的个人进度。
+- 单人学习或个人训练营场景，可以放 `DuplicatePage` 按钮，引导学员复制一份个人副本，再在自己的副本里勾选进度。
 
 按以下优先级实现：
 
@@ -82,7 +84,7 @@ DocxXML 示例：
 | 1 | Base / 表格 / 表单 + 文档按钮 OpenLink | 需要真实参与人数、头像、名单和进度汇总 |
 | 2 | checkbox + callout | 单篇教程内简单自查打卡 |
 | 3 | task / 任务清单 | 需要讲师分配和跟进 |
-| 4 | 文档按钮 OpenLink / DuplicatePage / FollowPage | 只需要跳转、复制页面或关注页面 |
+| 4 | 文档按钮 OpenLink / DuplicatePage / FollowPage | 只需要跳转、复制个人副本或关注页面 |
 | 5 | 占位区 | 当前工具不支持自动统计，但要保留设计位置 |
 
 如果没有真实数据源，默认使用 checkbox + callout，不要假装有真实头像墙或参与统计。
@@ -109,6 +111,7 @@ DocxXML 示例：
   <p><b>我已参与</b></p>
   <checkbox done="false">我已完成本节学习和练习。</checkbox>
   <p><button action="OpenLink" src="https://example.com">打开打卡表</button></p>
+  <p><button action="DuplicatePage" src="https://example.com">复制个人学习副本</button></p>
   <p>当前进度：由讲师在 Base/表格中统计。</p>
   <p>[参与头像区占位：接入 Base 人员字段后展示已参与学员名单或头像]</p>
 </callout>
