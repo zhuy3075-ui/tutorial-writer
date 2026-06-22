@@ -28,7 +28,7 @@ lark-cli drive +import --type docx --as user --file ./tutorial.md --json
 
 验收时必须确认返回链接包含 `/docx/`。如果返回 `/file/` 或只有 `.md` 文件 token，说明上传形态错了。
 
-如果教程规划了 img2.0 生成图，先在正文放明确插图位，再生成图片，并用 `docs +media-insert` 把图片插入到对应位置附近。图片提示词文档也要用 `docs +create` 创建成单独飞书云文档，或作为明确附件交付。
+如果教程规划了 img2.0 生成图，先在正文放明确插图位，再生成图片，按 `image-illustration.md` 完成自检；自检合格后再用 `docs +media-insert` 把图片插入到对应位置附近。图片提示词文档也要用 `docs +create` 创建成单独飞书云文档，或作为明确附件交付。
 
 ### 禁止“只给命令不执行”
 
@@ -340,7 +340,7 @@ lark-cli docs +create --api-version v2 --as user --doc-format markdown --content
 - 图片下方或前后有一句解释“这张图怎么看”。
 - 图片没有替代截图或画板的职责。
 - 图片提示词文档可追溯每张图片的生成目的和提示词。
-- 如果规划了“需要生成”的 img2.0 图片，不能只留下插图位；必须实际生成并插入。
+- 如果规划了“需要生成”的 img2.0 图片，不能只留下插图位；必须实际生成、自检合格并插入。
 
 ---
 
