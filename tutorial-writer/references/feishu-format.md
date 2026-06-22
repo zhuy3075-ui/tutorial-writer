@@ -134,6 +134,29 @@ Callout 块不放正文步骤。正文应脱离 Callout 仍能独立阅读。
 
 代码块必须标注语言类型（bash / python / json / yaml 等）。
 
+代码块后不能直接接表格、画板、图片或 Callout。必须先用普通段落说明：
+
+- 这段代码/命令刚刚完成了什么。
+- 下一块视觉内容要帮助读者判断什么。
+- 如果输出不符合预期，优先看哪里。
+
+DocxXML 示例：
+
+```xml
+<p>先跑这条命令，确认你创建的是可编辑云文档，而不是普通 Markdown 文件。</p>
+<pre lang="bash" caption="创建飞书云文档"><code>lark-cli docs +create --api-version v2 --as user --content @./tutorial.xml --json</code></pre>
+<p>命令成功只代表文档创建出来了。接下来这张表用来判断它是不是“教学可用”：既要有 docx 链接，也要能看到高亮块、表格和代码块。</p>
+<table>
+  <thead>
+    <tr><th background-color="light-gray">检查项</th><th background-color="light-gray">合格标准</th><th background-color="light-gray">不合格先改哪里</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>链接形态</td><td>包含 /docx/</td><td>改用 docs +create</td></tr>
+    <tr><td>富文本块</td><td>能看到 callout/table/pre</td><td>补 DocxXML 块</td></tr>
+  </tbody>
+</table>
+```
+
 ### 4. 折叠块
 
 用于降低正文密度。以下内容放入折叠块：
@@ -223,6 +246,7 @@ graph TD
 - 案例拆解型教程：至少 1 张问题-尝试-结果流程图；如果有复用场景，再加对比表。
 - 工具/API 类教程：优先使用架构图 + 流程图，说明“谁调用谁、输入输出是什么”。
 - 每张图后必须有 1 段“怎么看这张图”的解释，不允许放完图直接进入下一节。
+- 每张图前必须有 1 句“为什么现在看这张图”；图不能突然插在代码或表格后面。
 
 #### 图后解释模板
 
