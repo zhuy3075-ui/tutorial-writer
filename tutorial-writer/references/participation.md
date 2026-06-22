@@ -60,32 +60,46 @@ DocxXML 示例：
 
 ## 三、实现优先级与降级
 
-飞书文档是否能支持真正的按钮、头像墙、实时统计，取决于当前 `lark-cli docs` 支持的块能力。不要编造不存在的能力。
+当前 `lark-cli docs` 的 DocxXML 支持 `<button>`，但它是文档操作按钮，不是表单提交按钮。可用动作只有：
+
+```xml
+<button action="OpenLink" src="https://example.com">打开打卡表</button>
+<button action="DuplicatePage" src="https://example.com">复制页面</button>
+<button action="FollowPage" src="https://example.com">关注页面</button>
+```
+
+因此：
+
+- 可以用按钮打开打卡表、作业提交表、课程主页或参考资料。
+- 不要把 `<button>` 写成“点击后自动登记当前学员已参与”的按钮。
+- 不要承诺 Docx 文档内有原生头像墙、点击计数、实时参与人墙。
+- 如果需要真实参与记录、人员头像、人数统计和进度汇总，默认接入飞书 Base / 表格 / 表单。
 
 按以下优先级实现：
 
 | 优先级 | 方式 | 适用场景 |
 |--------|------|----------|
-| 1 | 飞书原生互动块 / button / reaction / poll（如果 CLI 支持） | 需要真实点击“我已参与” |
-| 2 | checkbox + callout | 单篇教程内简单打卡 |
+| 1 | Base / 表格 / 表单 + 文档按钮 OpenLink | 需要真实参与人数、头像、名单和进度汇总 |
+| 2 | checkbox + callout | 单篇教程内简单自查打卡 |
 | 3 | task / 任务清单 | 需要讲师分配和跟进 |
-| 4 | 飞书 Base / 表格统计 | 需要参与人数、头像、名单和进度汇总 |
+| 4 | 文档按钮 OpenLink / DuplicatePage / FollowPage | 只需要跳转、复制页面或关注页面 |
 | 5 | 占位区 | 当前工具不支持自动统计，但要保留设计位置 |
 
-如果不能确认原生按钮可用，默认使用 checkbox + callout，不要假装有真实按钮。
+如果没有真实数据源，默认使用 checkbox + callout，不要假装有真实头像墙或参与统计。
 
 ## 四、参与头像与进度展示
 
-如果用户要求“点击后显示进度和参与人的头像”，优先建议接入飞书 Base 或表格：
+如果用户要求“点击后显示进度和参与人的头像”，优先接入飞书 Base 或表格。Base 字段建议：
 
 ```text
 字段建议：
-- 学员
-- 头像
+- 学员：user 字段，支持多人时设为 multiple
 - 章节
 - 参与状态：未开始 / 已参与 / 已完成
+- 完成进度：number 字段，样式可设为 progress
 - 完成时间
 - 作业链接 / 截图
+- 是否完成：checkbox 字段
 ```
 
 教程文档中可以放一个参与区：
@@ -94,8 +108,9 @@ DocxXML 示例：
 <callout emoji="✅" background-color="light-green" border-color="green">
   <p><b>我已参与</b></p>
   <checkbox done="false">我已完成本节学习和练习。</checkbox>
+  <p><button action="OpenLink" src="https://example.com">打开打卡表</button></p>
   <p>当前进度：由讲师在 Base/表格中统计。</p>
-  <p>[参与头像区：接入 Base 后展示已参与学员头像或名单]</p>
+  <p>[参与头像区占位：接入 Base 人员字段后展示已参与学员名单或头像]</p>
 </callout>
 ```
 
