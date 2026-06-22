@@ -9,15 +9,16 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 
 ## 输出边界
 
-- 默认交付物是**飞书云文档（docx）**，不是 Drive 里的普通 `.md` 文件。
-- 需要使用飞书 CLI 发布时，优先使用 `lark-cli docs +create --api-version v2` 和 DocxXML 表达高亮块、表格、代码块、检查项、画板等富文本结构。
+- 默认交付物是**已发布的飞书云文档（docx）**，不是本地草稿，也不是 Drive 里的普通 `.md` 文件。
+- 除非用户明确说“只生成草稿 / 不上传 / 不调用飞书 CLI”，否则必须实际执行 `lark-cli docs +create --api-version v2` 创建飞书云文档，并返回 `/docx/` 链接。
+- 发布教程正文时必须使用 DocxXML 表达高亮块、表格、代码块、检查项、分栏、画板等富文本结构；不要用 Markdown 上传替代漂亮排版。
 - 只有当用户明确要求“上传 Markdown 文件 / 原生 .md 文件 / Drive 普通文件”时，才使用 `lark-cli markdown +create`。
 - 每篇教程至少规划 1 个画板类图，并按内容适配流程图、思维导图、对比图、层级图、泳道图、决策树或闭环图。画板图必须层次分明、美观，不允许只用纯文字代替关键流程图。
 - 教程正文必须有知识点之间的逻辑衔接、必要解释和过渡，不允许把知识库摘录拼接成章节。
 - 对快速变化、知识库信息不足、用户要求补充资料的主题，必须适度联网搜索并引用可靠来源。
 - 联网搜索用于校准教程内容，不用于自动优化、重构或改写知识库仓库。
 - 正式写正文前必须先判断教程形态：单节教程、小合集还是整套课程；再决定放在单篇飞书文档、多篇文档，还是 Wiki 知识库结构。
-- 可在合适位置插入由 img2.0 生成的上下文相关图片，用于缓解学习压力、知识点演示和阶段汇总；图片提示词必须单独生成文档。
+- 可在合适位置插入由 img2.0 生成的上下文相关图片，用于缓解学习压力、知识点演示和阶段汇总；一旦规划为“需要生成”，必须实际生成图片、保存本地资产、用 `lark-cli docs +media-insert` 插入飞书文档，并单独创建生图提示词飞书文档。
 
 ## 工作流
 
@@ -46,7 +47,11 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
     ↓
 规划 img2.0 插图位与生图提示词文档（按 image-illustration.md 规则）
     ↓
-飞书云文档格式化输出（按 feishu-format.md 规范）
+生成 DocxXML 富文本正文（按 feishu-format.md 规范）
+    ↓
+执行飞书 CLI 创建云文档并验证 /docx/ 链接
+    ↓
+如有 img2.0 图片：生成图片 → 插入飞书文档 → 创建提示词文档
 ```
 
 ## 四段式展开
@@ -108,8 +113,11 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - [ ] 已生成独立的 img2.0 生图提示词文档；如实际发布，提示词文档也作为独立文档或附件交付
 - [ ] 对比内容使用表格、分栏、对比图或高亮块显著显示
 - [ ] 飞书排版四件套已使用；如实际创建飞书文档，使用 DocxXML 富文本块而不是普通 Markdown 文件上传
+- [ ] 已实际执行 `lark-cli docs +create --api-version v2` 创建飞书云文档；除非用户明确要求只生成草稿
+- [ ] 飞书正文不是普通 Markdown 导入，必须能看到高亮块、表格、代码块、检查项、分栏/画板等富文本块
 - [ ] 场外文档出处置顶
 - [ ] 练习可在 5 分钟内验证
 - [ ] 至少一个讨论节点
 - [ ] 实操作业（如章节需要）：任务 + 现成材料（prompt/命令/模板），可直接复制使用
-- [ ] 如使用飞书 CLI 发布，返回的是 `/docx/` 云文档链接，并用 `docs +fetch --api-version v2` 验证标题和富文本块存在
+- [ ] 返回的是 `/docx/` 云文档链接，并用 `docs +fetch --api-version v2` 验证标题和富文本块存在
+- [ ] 如规划了 img2.0 图片，图片已生成并插入飞书文档；生图提示词文档也已创建成飞书文档或明确交付
