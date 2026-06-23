@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tutorial-writer 教程生成 Skill</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --paper: #ffffff;
+      --text: #1f2937;
+      --muted: #64748b;
+      --line: #dbe3ee;
+      --accent: #2563eb;
+      --accent-2: #16a34a;
+      --soft-blue: #eff6ff;
+      --soft-green: #ecfdf5;
+      --soft-amber: #fffbeb;
+      --code-bg: #0f172a;
+      --code-text: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.72;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .hero {
+      padding: 36px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 860px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 20px;
+      padding: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    nav h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    nav a {
+      display: block;
+      padding: 6px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    section {
+      margin-bottom: 24px;
+      padding: 28px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      font-size: 19px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    ul, ol {
+      padding-left: 22px;
+      margin: 10px 0;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      background: var(--soft-blue);
+    }
+
+    .note.green {
+      border-color: #bbf7d0;
+      background: var(--soft-green);
+    }
+
+    .note.amber {
+      border-color: #fde68a;
+      background: var(--soft-amber);
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #eef2f7;
+      color: #0f172a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    pre {
+      overflow-x: auto;
+      padding: 16px;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: var(--code-text);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    .footer {
+      margin-top: 26px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .page {
+        padding: 18px 12px 40px;
+      }
+
+      .hero, section {
+        padding: 22px;
+      }
+
+      h1 {
+        font-size: 29px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: static;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <p class="eyebrow">Codex Skill · Feishu Docx Tutorial Generator</p>
+      <h1>tutorial-writer 教程生成 Skill</h1>
+      <p class="lead">
+        把本地知识库、课程主题、案例复盘、工具说明或飞书参考文档，转化为适合发布到飞书云文档的系统化教程。
+        它会先帮你确认需求、规划结构、检索知识库、校准陈旧内容，再调用飞书 CLI 生成带有高亮块、表格、检查项、画板图、图片和练习任务的正式飞书教程。
+      </p>
+      <div class="actions">
+        <a class="button" href="https://github.com/zhuy3075-ui/tutorial-writer" target="_blank" rel="noreferrer">打开 GitHub 仓库</a>
+        <a class="button secondary" href="#quickstart">查看使用教程</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <nav aria-label="页面目录">
+        <h2>目录</h2>
+        <a href="#audience">适合谁使用</a>
+        <a href="#features">核心功能</a>
+        <a href="#quickstart">推荐使用方式</a>
+        <a href="#example">完整示例</a>
+        <a href="#install">安装方式</a>
+        <a href="#structure">目录结构</a>
+        <a href="#cli">飞书 CLI 要求</a>
+        <a href="#acceptance">交付验收</a>
+      </nav>
+
+      <main>
+        <section id="audience">
+          <h2>适合谁使用</h2>
+          <ul>
+            <li>想把本地知识库整理成课程教程的人。</li>
+            <li>想为线下 AI 编程课生成讲义的人。</li>
+            <li>想把工具、API 或项目经验写成小白教程的人。</li>
+            <li>想把教程直接发布成飞书 <code>docx</code> 云文档的人。</li>
+            <li>想让 Codex 先通过问答帮自己梳理目标、痛点和交付物的人。</li>
+          </ul>
+        </section>
+
+        <section id="features">
+          <h2>核心功能</h2>
+          <div class="cards">
+            <article class="card">
+              <h3>启动前需求确认</h3>
+              <p>正式生成前先让用户选择教程生成、需求梳理、参考学习或自定义模式，再整理初级需求汇总，确认后才继续。</p>
+            </article>
+            <article class="card">
+              <h3>课程形态规划</h3>
+              <p>判断应该做成单节教程、小合集还是整套课程，并决定单篇文档、多篇文档或 Wiki 知识库结构。</p>
+            </article>
+            <article class="card">
+              <h3>知识库检索与联网校准</h3>
+              <p>从本地知识库提取素材，对可能陈旧的工具/API/平台知识联网校准，只优化教程内容，不修改知识库。</p>
+            </article>
+            <article class="card">
+              <h3>多 Agent 深度分析</h3>
+              <p>正式写正文前，从内容主线、视觉教学、资料校准等角度分析，再组织成有过渡、有解释的教程。</p>
+            </article>
+            <article class="card">
+              <h3>飞书富文本教程</h3>
+              <p>默认生成飞书 <code>docx</code> 云文档，使用 DocxXML 表达高亮块、表格、检查项、分栏、代码块、按钮、画板图和图片。</p>
+            </article>
+            <article class="card">
+              <h3>图表、插图与作业</h3>
+              <p>规划画板图、img2.0 教学插图、互动作业、学习打卡区和真实进度统计入口。</p>
+            </article>
+          </div>
+
+          <div class="note amber">
+            <strong>插图原则：</strong>img2.0 图片必须回答教程当前位置的具体问题，例如“这一步为什么要先拆任务”“截图、画板、img2.0 分别负责什么”。不能只是“AI 很高级”“资料很多”“云端生产线”这类泛泛概念图。
+          </div>
+        </section>
+
+        <section id="quickstart">
+          <h2>推荐使用方式：用 Codex 生成</h2>
+          <p>最推荐的流程是：新建 Codex 对话 → 使用计划模式获取需求 → 检索自己的知识库 → 通过对话明确目标 → 调用 <code>$tutorial-writer</code> 生成飞书教程。</p>
+
+          <h3>第 1 步：新建一个 Codex 对话</h3>
+          <p>建议为每个教程主题新开一个对话，避免上下文混乱。可以先告诉 Codex：</p>
+          <pre><code>我想做一份飞书教程，请先不要直接生成正文。请先进入计划模式，帮我通过问答确认需求。</code></pre>
+
+          <h3>第 2 步：使用计划模式获取需求</h3>
+          <p>让 Codex 先问清最终成果、目标学员、当前痛点、课程形态、飞书承载方式、参考风格、是否需要 img2.0 图片、是否需要作业和进度统计。</p>
+          <pre><code>请使用计划模式帮我梳理一份教程需求。
+
+主题：这里写你的教程主题
+知识库路径：这里写你的本地知识库路径
+目标读者：这里写学员画像
+预期成果：单篇飞书教程 / 小合集 / Wiki 课程 / 公众号式项目实战文
+
+请通过问答确认我的目标、痛点、已有材料、参考风格、交付形式和验收标准。先输出初级需求汇总，不要直接写正文。</code></pre>
+
+          <h3>第 3 步：让 Codex 检索你的知识库</h3>
+          <pre><code>请检索这个知识库中与本教程主题相关的内容，只提取有用素材，不要修改知识库：
+
+/你的/知识库/路径
+
+请按“可直接用于教程的知识点、可能陈旧需要联网确认的内容、适合做图表的位置、适合做练习的位置”整理。</code></pre>
+
+          <p>如果主题涉及快速变化的工具/API，可以补充：</p>
+          <pre><code>知识库可能有陈旧内容，请联网确认官方最新资料，只用于优化教程，不要改知识库仓库。</code></pre>
+
+          <h3>第 4 步：通过对话明确目标</h3>
+          <pre><code>目标成果改成小合集。
+学员是已经会用 AI 写代码，但不会拆任务的新手。
+参考风格偏公众号项目实战，先展示成果，再拆流程。
+需要 img2.0 图片，但不要太多。
+需要每章有作业和打卡。</code></pre>
+
+          <p>确认无误后回复：</p>
+          <pre><code>继续，按这个需求开始生成。</code></pre>
+
+          <h3>第 5 步：调用此 Skill 生成飞书教程</h3>
+          <pre><code>请使用 $tutorial-writer，基于刚刚确认的需求、知识库检索结果和联网校准结果，生成正式飞书教程。
+
+要求：
+1. 先规划教程形态：单节 / 小合集 / 整套课程。
+2. 决定飞书承载方式：单文档 / 多文档 / Wiki。
+3. 正文使用自然语言讲解，少用代码堆砌。
+4. 使用飞书 DocxXML 富文本块，包括高亮块、表格、检查项、画板图。
+5. 需要时生成 img2.0 图片并插入对应位置。
+6. 作业区使用 checkbox / 高亮块 / Base 或表单入口。
+7. 使用 lark-cli 创建飞书 docx 文档，并返回 /docx/ 链接。</code></pre>
+
+          <div class="note green">
+            Skill 启动后会再次弹出模式选择或编号选项，这是正常行为。选择“教程生成模式”即可。
+          </div>
+
+          <h3>第 6 步：确认飞书文档</h3>
+          <pre><code>请用 lark-cli docs +fetch --api-version v2 验证刚生成的飞书文档，确认标题、高亮块、表格、检查项、画板图、图片是否存在。</code></pre>
+        </section>
+
+        <section id="example">
+          <h2>一条完整示例</h2>
+          <pre><code>我想生成一份飞书教程，请优先使用计划模式帮我获取需求，不要直接写正文。
+
+教程主题：Vibe Coding 小白入门
+知识库路径：/Users/zy/Desktop/知识库/本地（Ai库）
+目标学员：用过 AI 写代码，但不会拆任务、不会判断输出质量的新手
+预期成果：一份适合线下课使用的飞书 docx 教程
+
+请先通过问答整理初级需求汇总。需求确认后，再调用 $tutorial-writer 检索知识库、联网校准，并使用 lark-cli 生成正式飞书教程。</code></pre>
+        </section>
+
+        <section id="install">
+          <h2>安装方式</h2>
+          <p>把仓库中的 <code>tutorial-writer</code> 目录放到 Codex skills 目录：</p>
+          <pre><code>mkdir -p ~/.codex/skills
+cp -R tutorial-writer ~/.codex/skills/</code></pre>
+          <p>安装后，在新对话中用 <code>$tutorial-writer</code> 触发。</p>
+        </section>
+
+        <section id="structure">
+          <h2>目录结构</h2>
+          <pre><code>tutorial-writer/
+├── SKILL.md
+├── agents/
+│   └── openai.yaml
+└── references/
+    ├── content-depth.md
+    ├── course-planning.md
+    ├── feishu-format.md
+    ├── image-illustration.md
+    ├── intake-and-mode.md
+    ├── participation.md
+    ├── screenshot-guide.md
+    ├── tutorial-structure.md
+    └── writing-rules.md</code></pre>
+        </section>
+
+        <section id="cli">
+          <h2>飞书 CLI 要求</h2>
+          <p>Skill 默认要求生成飞书 <code>docx</code> 云文档。需要本机可用：</p>
+          <pre><code>lark-cli docs --api-version v2 --help</code></pre>
+
+          <h3>常用创建命令</h3>
+          <pre><code>lark-cli docs +create --api-version v2 --content @tutorial.xml --json</code></pre>
+
+          <h3>常用验证命令</h3>
+          <pre><code>lark-cli docs +fetch --api-version v2 --doc "&lt;飞书文档链接&gt;" --doc-format xml --scope full --json</code></pre>
+
+          <p>只有用户明确要求上传原生 Markdown 文件时，才使用 <code>lark-cli markdown +create</code>。</p>
+        </section>
+
+        <section>
+          <h2>使用前准备</h2>
+          <ul>
+            <li>本地知识库路径。</li>
+            <li>教程主题。</li>
+            <li>目标学员画像。</li>
+            <li>参考文章或飞书教程链接。</li>
+            <li>是否需要联网校准。</li>
+            <li>是否需要 img2.0 图片。</li>
+            <li>是否需要飞书 Base / 表单做真实进度统计。</li>
+            <li>飞书 CLI 登录和权限。</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>不适用场景</h2>
+          <ul>
+            <li>只想要一句话摘要。</li>
+            <li>不需要飞书文档格式。</li>
+            <li>不希望 Codex 进行需求确认。</li>
+            <li>不允许联网，但主题强依赖最新工具/API。</li>
+            <li>想自动修改原知识库仓库。</li>
+          </ul>
+        </section>
+
+        <section id="acceptance">
+          <h2>交付验收清单</h2>
+          <ul>
+            <li>已先完成模式选择和需求确认。</li>
+            <li>已说明教程形态和飞书承载方式。</li>
+            <li>已检索知识库并提取核心知识点。</li>
+            <li>陈旧知识已联网校准，或说明无需联网的理由。</li>
+            <li>正文不是资料拼贴，有清晰过渡。</li>
+            <li>标题层级、序号层级正确。</li>
+            <li>有高亮块、表格、检查项、画板图等飞书富文本块。</li>
+            <li>作业和练习可在课堂内验证。</li>
+            <li>如规划 img2.0 图片，图片已生成、自检并插入文档。</li>
+            <li>返回的是飞书 <code>/docx/</code> 链接。</li>
+            <li>已用 <code>lark-cli docs +fetch --api-version v2</code> 验证文档内容。</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <p class="footer">
+      GitHub: <a href="https://github.com/zhuy3075-ui/tutorial-writer" target="_blank" rel="noreferrer">https://github.com/zhuy3075-ui/tutorial-writer</a>
+    </p>
+  </div>
+</body>
+</html>
