@@ -77,6 +77,28 @@
       font-size: 18px;
     }
 
+    .hero-visual {
+      margin: 28px 0 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .hero-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-visual figcaption {
+      padding: 10px 14px;
+      color: var(--muted);
+      font-size: 14px;
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -290,6 +312,10 @@
         把本地知识库、课程主题、案例复盘、工具说明或飞书参考文档，转化为适合发布到飞书云文档的系统化教程。
         它会先帮你确认需求、规划结构、检索知识库、校准陈旧内容，再调用飞书 CLI 生成带有高亮块、表格、检查项、画板图、图片和练习任务的正式飞书教程。
       </p>
+      <figure class="hero-visual">
+        <img src="assets/images/tutorial-writer-readme-hero.png" alt="tutorial-writer 从需求问答到飞书教程发布的完整工作流示意图">
+        <figcaption>这张 img2.0 配图对应 Skill 的真实流程：需求问答、知识库检索、联网校准、图表规划、教学插图生成和飞书文档发布。</figcaption>
+      </figure>
       <div class="actions">
         <a class="button" href="https://github.com/zhuy3075-ui/tutorial-writer" target="_blank" rel="noreferrer">打开 GitHub 仓库</a>
         <a class="button secondary" href="#quickstart">查看使用教程</a>
