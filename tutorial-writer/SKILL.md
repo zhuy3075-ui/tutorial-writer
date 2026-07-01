@@ -1,6 +1,6 @@
 ---
 name: tutorial-writer
-description: "Diagnose, plan, generate, update, and publish structured Feishu Docx tutorials with lark-cli/飞书 CLI from knowledge-base material, reference docs, screenshots, README/GitHub projects, or vague teaching ideas. Use when the user asks for 教程、小白教程、飞书教程、课程讲义、图文教程、知识库整理成教程、项目实战文、教程大纲、教程需求诊断、深度访谈、参考飞书链接学习、上传到飞书文档、使用飞书 CLI/lark-cli 创建或修改文档、更新已有飞书 docx 链接, or asks to turn notes into a teachable tutorial for learners with AI coding experience."
+description: "Diagnose, analyze, plan, generate, update, and publish structured tutorials and Feishu Docx tutorials with lark-cli/飞书 CLI from knowledge-base material, reference docs, screenshots, PDFs, README/GitHub projects, or vague teaching ideas. Use when the user asks for 教程、小白教程、飞书教程、课程讲义、图文教程、知识库整理成教程、项目实战文、教程大纲、教程需求诊断、深度访谈、参考飞书链接学习、优质教程分析、教程模板结构提炼、学习教程结构、优化 tutorial-writer skill、上传到飞书文档、使用飞书 CLI/lark-cli 创建或修改文档、更新已有飞书 docx 链接, or asks to turn notes into a teachable tutorial for learners with AI coding experience."
 ---
 
 # tutorial-writer
@@ -21,6 +21,7 @@ description: "Diagnose, plan, generate, update, and publish structured Feishu Do
 - 对快速变化、知识库信息不足、用户要求补充资料的主题，必须适度联网搜索并引用可靠来源。
 - 联网搜索用于校准教程内容，不用于自动优化、重构或改写知识库仓库。
 - 正式写正文前必须先判断教程形态：单节教程、小合集还是整套课程；再决定放在单篇飞书文档、多篇文档，还是 Wiki 知识库结构。
+- 当用户明确目标是“学习优质教程模板结构 / 分析参考教程设计 / 提炼模板 / 优化本 skill”，进入**参考教程学习模式**：先读取 `references/tutorial-analysis-mode.md`，分析参考材料并输出结构卡、节奏卡、模板卡；此模式不是默认飞书发布流程，不创建 `/docx/`，也不要求先走教程生成的需求诊断和大纲审查。
 - 可在合适位置插入由 img2.0 生成的上下文相关图片，用于缓解学习压力、知识点演示和阶段汇总；图片必须回答当前位置的具体教学问题，不能生成泛泛概念插画；一旦规划为“需要生成”，必须实际生成图片、保存本地资产、用 `lark-cli docs +media-insert` 插入飞书文档，并单独创建生图提示词飞书文档。
 - 如教程包含项目部署或交付环节，默认写成给 Codex / WorkBuddy / Claude Code 的自然语言部署提示词；如果项目有 GitHub 链接，必须提供链接；如果项目有 README，必须读取并把 README 摘要、链接或附件入口加入教程正文，不讲无关代码细节。
 
@@ -30,6 +31,7 @@ description: "Diagnose, plan, generate, update, and publish structured Feishu Do
 
 **启动硬闸门：**
 
+- 如果用户的目标是学习优质教程结构、分析参考教程、提炼模板或优化本 skill，先读取 `references/tutorial-analysis-mode.md`，执行参考教程学习模式；不要创建飞书文档，不要要求用户先选择快速生成 / 标准诊断 / 深度访谈，也不要把学习结构误判成一比一复刻。
 - 使用本 skill 后，必须先读取 `references/intake-and-mode.md`，并先让用户选择工作模式。
 - 任何需要用户做选择、确认、授权、审查或风险接受的节点，都必须先按 `references/choice-interaction.md` 尝试真实可点击选项：弹窗、选项卡、计划模式选项、`request_user_input` 或当前环境提供的等价交互。每个选项必须有描述，推荐项放第一位；如果环境不支持，才用编号降级，并停止等待用户回复。
 - 用户提供参考飞书教程链接时，必须按 `references/reference-feishu-mode.md` 先询问“总结借鉴 / 混合复刻 / 一比一还原”哪一种；不得默认一比一复制，也不得默认只总结。
@@ -44,7 +46,11 @@ description: "Diagnose, plan, generate, update, and publish structured Feishu Do
 - 除非用户在同一条请求中明确写出“跳过需求诊断和大纲审查 / 不要问 / 直接生成”，否则不能跳过需求确认和大纲审查；若用户要求跳过，最终报告必须标注质量风险。
 
 ```
-弹出可点击模式选择：快速生成 / 标准诊断 / 深度访谈 / 参考学习 / 修改已有飞书文档 / 自定义模式，每个选项带描述，然后停下等待用户选择
+识别用户目标：参考教程学习 / 生成新教程 / 复刻参考教程 / 修改已有飞书文档
+    ↓
+如果是参考教程学习：读取 tutorial-analysis-mode.md → 抽取目录、正文片段、图片/附件用途 → 输出结构卡、节奏卡、模板卡、问题卡 → 如用户要求优化 skill，再沉淀到 reference 和 SKILL.md
+    ↓
+如果是生成新教程：弹出可点击模式选择：快速生成 / 标准诊断 / 深度访谈 / 参考学习 / 修改已有飞书文档 / 自定义模式，每个选项带描述，然后停下等待用户选择
     ↓
 项目类型判断：单篇教程 / 小合集 / Wiki 课程 / 项目实战文 / 工具操作教程 / 部署交付教程 / 线下课讲义 / 参考文档复刻
     ↓
@@ -107,6 +113,7 @@ description: "Diagnose, plan, generate, update, and publish structured Feishu Do
 ## 需要加载的 reference
 
 - 任何需要用户选择、确认、授权、审查或风险接受时，读 `references/choice-interaction.md`
+- 用户要求学习优质教程模板结构、分析教程设计、提炼模板、沉淀 SOP 或优化本 skill 时，读 `references/tutorial-analysis-mode.md`
 - 启动任务、弹出模式选择、问答澄清需求、学习参考飞书链接时，读 `references/intake-and-mode.md`
 - 用户提供参考飞书教程链接、要求一比一还原、参考排版、复刻图片或处理无法复制图片时，读 `references/reference-feishu-mode.md`
 - 做项目类型判断、项目级需求诊断、老师视角和产品经理视角汇总时，读 `references/needs-diagnosis.md`
@@ -143,6 +150,9 @@ description: "Diagnose, plan, generate, update, and publish structured Feishu Do
 ## 输出检查清单
 
 每篇教程输出前，确认：
+- [ ] 如果用户目标是学习优质教程模板结构、分析参考教程或优化本 skill，已进入 `tutorial-analysis-mode.md`，并且没有创建飞书文档、没有默认进入教程生成流程。
+- [ ] 参考教程学习模式已读取目录或 PDF 关键页、抽取代表性章节、记录图片/附件用途，并区分“明确呈现”和“推断判断”。
+- [ ] 参考教程学习模式已输出结构卡、节奏卡、模板卡和问题卡；如果沉淀为 skill，细节已放入 reference，`SKILL.md` 只保留路由和硬规则。
 - [ ] 正式写教程前已按 `choice-interaction.md` 弹出模式选择，让用户选择快速生成 / 标准诊断 / 深度访谈 / 参考学习 / 修改已有飞书文档 / 自定义模式；每个选项有描述，并在用户选择前没有继续执行后续步骤
 - [ ] 所有需要用户选择、确认、授权、审查或风险接受的节点，都已优先使用真实可点击选项；不支持时才编号降级，且已停止等待用户回复
 - [ ] 已判断是否需要深度访谈；简单任务没有强行拉长，复杂或不清晰任务已按深度访谈模式逐轮澄清

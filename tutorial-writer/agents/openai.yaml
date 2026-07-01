@@ -1,4 +1,4 @@
 interface:
   display_name: "Tutorial Writer"
-  short_description: "Diagnose, create, and update Feishu tutorials"
-  default_prompt: "Use $tutorial-writer to choose a tutorial mode, clarify my needs with standard or deep interview, then create or update a classroom-ready Feishu Docx tutorial with lark-cli."
+  short_description: "Analyze tutorial templates, then create or update Feishu tutorials"
+  default_prompt: "Use $tutorial-writer to analyze high-quality tutorial structures or choose a tutorial mode, clarify my needs, then create or update a classroom-ready Feishu Docx tutorial with lark-cli."
