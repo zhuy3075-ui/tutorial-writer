@@ -8,6 +8,8 @@
 
 这张 img2.0 配图对应 Skill 的真实流程：需求问答、知识库检索、联网校准、图表规划、教学插图生成和飞书文档发布。
 
+如果你要把这个 Skill 分发给其他人，先看：[tutorial-writer 分发、部署与使用教程](docs/tutorial-writer-distribution-guide.md)。
+
 ## 适合谁使用
 
 - 想把本地知识库整理成课程教程的人。
