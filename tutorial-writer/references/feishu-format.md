@@ -6,6 +6,8 @@
 
 但“飞书云文档”不等于所有内容都放进一篇文档。先根据 `course-planning.md` 判断是单文档、多文档，还是 Wiki 知识库结构。
 
+凡是需要用户在新建、更新原文档、另存副本、覆盖全文、创建 Wiki 节点之间做选择，或需要用户接受丢失图片/评论/画板的风险，都必须按 `choice-interaction.md` 先弹出可点击选项；不可用时才编号降级并停止等待。
+
 ### 创建 / 更新决策
 
 先判断本轮是否已有目标 docx。
@@ -30,7 +32,7 @@ lark-cli docs +fetch --api-version v2 --doc "<docx链接或token>" --doc-format 
 lark-cli docs +update --api-version v2 --doc "<docx链接或token>" --command block_replace --block-id "<block_id>" --content @./patch.xml --json
 ```
 
-优先使用 `block_replace`、`block_insert_after`、`str_replace` 等精确更新。`overwrite` 会清空文档，可能丢失图片、评论、画板或手工修改，只有用户明确要求“全文覆盖 / 重建原文档”并接受风险时才使用。
+优先使用 `block_replace`、`block_insert_after`、`str_replace` 等精确更新。`overwrite` 会清空文档，可能丢失图片、评论、画板或手工修改；只有用户通过可点击选项明确选择“全文覆盖 / 重建原文档”并接受风险时才使用。
 
 仅当用户明确说“上传 Markdown 文件 / 原生 .md 文件 / Drive 普通文件”时，才使用：
 
@@ -97,7 +99,7 @@ lark-cli drive +import --type docx --as user --file ./tutorial.md --json
 
 ### Wiki 知识库
 
-适合完整课程或需要长期维护的训练营。先输出 Wiki 结构规划；只有用户确认 Wiki 空间和权限后，才创建 Wiki 节点。
+适合完整课程或需要长期维护的训练营。先输出 Wiki 结构规划；只有用户通过可点击选项确认 Wiki 空间和权限后，才创建 Wiki 节点。
 
 Wiki 首页必须包含：
 
