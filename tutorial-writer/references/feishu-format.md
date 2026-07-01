@@ -419,6 +419,9 @@ lark-cli docs +create --api-version v2 --as user --doc-format markdown --content
 - H2：大段落（"为什么需要""怎么做""常见错误"）
 - H3：步骤编号（"步骤 1：安装环境"）
 - H4：子步骤（少见，超过 3 个 H4 考虑拆成两步）
+- 教程最少使用 3 个层级，例如 `<title>` + `<h1>` + `<h2>`，正式课程建议使用 `<title>` + `<h1>` + `<h2>` + `<h3>`；复杂操作才加入 `<h4>`。
+- 每个层级下都必须有高亮块提示注意事项、目标、前置条件或常见坑。不要只放标题和正文。
+- 每个大章节开头必须有前言段，说明承接上一章什么、这一章解决什么、读完后进入哪里。
 
 ### 标题与序号层级
 
@@ -436,7 +439,8 @@ lark-cli docs +create --api-version v2 --as user --doc-format markdown --content
 
 #### 序号规则
 
-- 大步骤用标题编号：`步骤 1：准备环境`。
+- 不要用纯文本手写 `1.`、`一、`、`第 1 章` 来伪造标题编号。需要编号时，优先使用飞书原生有序列表或 DocxXML 的 `<ol><li seq="auto">...</li></ol>`。
+- 如果章节必须带编号，把编号交给飞书有序列表；标题文本只写语义标题，例如“准备环境”“生成部署提示词”。
 - 步骤内连续动作使用 `<ol><li seq="auto">...</li></ol>`。
 - 无先后顺序的要点使用 `<ul>`，不要强行编号。
 - 检查清单使用 `<checkbox>`，不要用普通列表冒充。
@@ -448,12 +452,21 @@ DocxXML 示例：
 
 ```xml
 <h1>怎么做</h1>
-<h2>步骤 1：准备环境</h2>
+<callout emoji="💡" background-color="light-blue" border-color="blue">
+  <p>这一章先把准备工作讲清楚，避免后面部署时缺少项目入口或权限。</p>
+</callout>
+<h2>准备环境</h2>
+<callout emoji="⚠️" background-color="light-yellow" border-color="yellow">
+  <p>注意：先确认工具版本和登录状态，再执行后续步骤。</p>
+</callout>
 <ol>
   <li seq="auto">打开终端。</li>
   <li seq="auto">执行版本检查命令。</li>
 </ol>
 <h3>如果版本不对怎么办</h3>
+<callout emoji="❓" background-color="light-gray" border-color="gray">
+  <p>如果版本不一致，先升级工具，再回到上一层继续验证。</p>
+</callout>
 <p>先升级工具，再回到上一步验证。</p>
 ```
 

@@ -20,6 +20,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - 联网搜索用于校准教程内容，不用于自动优化、重构或改写知识库仓库。
 - 正式写正文前必须先判断教程形态：单节教程、小合集还是整套课程；再决定放在单篇飞书文档、多篇文档，还是 Wiki 知识库结构。
 - 可在合适位置插入由 img2.0 生成的上下文相关图片，用于缓解学习压力、知识点演示和阶段汇总；图片必须回答当前位置的具体教学问题，不能生成泛泛概念插画；一旦规划为“需要生成”，必须实际生成图片、保存本地资产、用 `lark-cli docs +media-insert` 插入飞书文档，并单独创建生图提示词飞书文档。
+- 如教程包含项目部署或交付环节，默认写成给 Codex / WorkBuddy / Claude Code 的自然语言部署提示词；如果项目有 GitHub 链接，必须提供链接；如果项目有 README，必须读取并把 README 的用途、运行方式和交付约束融入教程，不讲无关代码细节。
 
 ## 工作流
 
@@ -65,6 +66,8 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
     ↓
 规划截图位与画板图（按 screenshot-guide.md 和 feishu-format.md 规则）
     ↓
+规划部署交付提示词与 README / GitHub 资料接入（按 deployment-handoff.md 规则）
+    ↓
 规划 img2.0 插图位、生图模型检测与提示词文档（按 image-illustration.md 规则）
     ↓
 生成 DocxXML 富文本正文（按 feishu-format.md 规范）
@@ -92,6 +95,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - 改写语言时，读 `references/writing-rules.md`
 - 规划作业互动、章节打卡、参与确认和进度展示时，读 `references/participation.md`
 - 标注配图位时，读 `references/screenshot-guide.md`
+- 规划项目部署、交付提示词、README 和 GitHub 链接接入时，读 `references/deployment-handoff.md`
 - 规划 img2.0 生成图、提示词文档和飞书插入位置时，读 `references/image-illustration.md`
 - 输出飞书云文档或飞书草稿前，读 `references/feishu-format.md`
 
@@ -136,8 +140,13 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - [ ] 核心知识点至少覆盖场景、问题、原理、操作、判断
 - [ ] 通过了 writing-rules.md 全部适用规则
 - [ ] 标题层级和序号层级正确：H1/H2/H3 不跳级；有序列表不混乱；子步骤缩进清晰
+- [ ] 教程至少使用 3 个标题层级；需要细分时使用 H1/H2/H3/H4；每个层级下都有高亮块提示注意事项、目标或常见坑
+- [ ] 标题章节编号使用飞书原生有序列表或自动编号结构，不用纯文本手写编号伪造层级
 - [ ] 配图位已标注（不生成图，只标注位置和描述）
+- [ ] 需要截图的步骤已规划真实网页截图，并要求使用 computer use / browser / Playwright 等可用插件截图，截图中用红色画笔标注关键位置
+- [ ] 每个操作步骤尽量对应工具截图；无法截图时已说明原因，并用画板或表格替代
 - [ ] 至少 1 个画板类图已规划，且说明图类型、层级、节点和视觉要求；图表类型与内容匹配
+- [ ] 如包含项目部署，已提供 Codex / WorkBuddy / Claude Code 自然语言部署提示词；如有 GitHub 链接和 README，已纳入教程
 - [ ] 已判断是否需要 img2.0 插图；需要时已规划插入位置、教学目的、图片提示词和本地资产路径
 - [ ] 如需生图，已完成生图模型能力检测：支持内置 img2.0 则直接生成；不支持或不是目标模型时，已走独立生图 API 配置
 - [ ] img2.0 图片数量与教程长度匹配，且每张图绑定具体章节、知识点、前后文、要回答的教学问题和图下注释；没有无意义装饰图或泛泛概念插画
