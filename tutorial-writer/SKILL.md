@@ -1,6 +1,6 @@
 ---
 name: tutorial-writer
-description: Generate structured, plain-language Feishu tutorial drafts from knowledge-base material for offline AI programming classes. Use when the user provides or references source material, a tutorial topic, target audience, course chapter, lesson script, screenshot plan, or asks to turn knowledge-base notes into a teachable tutorial for learners with AI coding experience.
+description: "Diagnose, plan, generate, update, and publish structured Feishu Docx tutorials with lark-cli/飞书 CLI from knowledge-base material, reference docs, screenshots, README/GitHub projects, or vague teaching ideas. Use when the user asks for 教程、小白教程、飞书教程、课程讲义、图文教程、知识库整理成教程、项目实战文、教程大纲、教程需求诊断、深度访谈、参考飞书链接学习、上传到飞书文档、使用飞书 CLI/lark-cli 创建或修改文档、更新已有飞书 docx 链接, or asks to turn notes into a teachable tutorial for learners with AI coding experience."
 ---
 
 # tutorial-writer
@@ -10,7 +10,9 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 ## 输出边界
 
 - 默认交付物是**已发布的飞书云文档（docx）**，不是本地草稿，也不是 Drive 里的普通 `.md` 文件。
-- 除非用户明确说“只生成草稿 / 不上传 / 不调用飞书 CLI”，否则必须实际执行 `lark-cli docs +create --api-version v2` 创建飞书云文档，并返回 `/docx/` 链接。
+- 除非用户明确说“只生成草稿 / 不上传 / 不调用飞书 CLI”，否则必须实际执行飞书 CLI，并返回 `/docx/` 链接。
+- 如果用户提供了已有飞书 docx 链接，或当前对话中已经创建过目标飞书文档，后续“修改 / 优化 / 继续 / 按刚刚的反馈改”默认使用 `lark-cli docs +update --api-version v2` 修改原文档；不要另起新链接，除非用户明确要求新建副本、另存一版或重做一份。
+- 只有没有可更新的目标文档时，才使用 `lark-cli docs +create --api-version v2` 新建飞书云文档。
 - 发布教程正文时必须使用 DocxXML 表达高亮块、表格、代码块、检查项、分栏、画板等富文本结构；不要用 Markdown 上传替代漂亮排版。
 - 只有当用户明确要求“上传 Markdown 文件 / 原生 .md 文件 / Drive 普通文件”时，才使用 `lark-cli markdown +create`。
 - 每篇教程至少规划 1 个画板类图，并按内容适配流程图、思维导图、对比图、层级图、泳道图、决策树或闭环图。画板图必须层次分明、美观，不允许只用纯文字代替关键流程图。
@@ -29,9 +31,10 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 **启动硬闸门：**
 
 - 使用本 skill 后，必须先读取 `references/intake-and-mode.md`，并先让用户选择工作模式。
-- 如果运行环境支持弹窗、选项式提问或 `request_user_input` 类工具，必须优先用选项式提问；如果不支持，就发送编号选项。
+- 如果运行环境支持弹窗、选项卡、计划模式选项或 `request_user_input` 类工具，必须优先用真正的选项式提问；每个选项要有简短理由，推荐项放第一位并标注推荐原因。如果不支持，才发送编号选项。
 - 发送模式选项后必须停下等待用户回复；不得继续读知识库、写正文、生成图片、创建飞书文档或上传。
 - 模式确认后必须先判断项目类型，再按 `references/needs-diagnosis.md` 做项目级需求诊断；诊断由“资深老师”和“资深产品经理”两个视角共同完成。
+- 深度访谈只在用户选择、需求复杂、用户明显说不清目标、或教程必须高度贴合特定人群时启用；简单教程走快速或标准诊断，不要把所有任务都拖成长访谈。
 - 需求诊断必须覆盖项目目标、学员画像、课程目标、内容边界、素材来源、审美表达、图文互动、发布交付、风险验收 9 个维度，但每轮只问最关键的 3-7 个问题。
 - 输出“项目级需求诊断结果”后必须停下，等待用户确认“继续 / 按这个做 / 你自行判断继续”或提出修改。
 - 用户确认需求后，按 `references/outline-review.md` 输出“全流程规范大纲”，再次停下等待用户审查。
@@ -39,7 +42,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - 除非用户在同一条请求中明确写出“跳过需求诊断和大纲审查 / 不要问 / 直接生成”，否则不能跳过需求确认和大纲审查；若用户要求跳过，最终报告必须标注质量风险。
 
 ```
-弹出模式选择：教程生成 / 需求梳理 / 参考飞书链接学习 / 自定义模式，然后停下等待用户回复
+弹出模式选择：快速生成 / 标准诊断 / 深度访谈 / 参考学习 / 修改已有飞书文档 / 自定义模式，然后停下等待用户回复
     ↓
 项目类型判断：单篇教程 / 小合集 / Wiki 课程 / 项目实战文 / 工具操作教程 / 部署交付教程 / 线下课讲义 / 参考文档复刻
     ↓
@@ -85,7 +88,7 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
     ↓
 执行轻量 Quality Loop：需求 / 大纲 / 内容 / 图文资产 / 飞书发布
     ↓
-执行飞书 CLI 创建云文档并验证 /docx/ 链接
+执行飞书 CLI：有原 docx 就更新原文档；没有原 docx 才新建，并验证 /docx/ 链接
     ↓
 如有 img2.0 图片：生成图片 → 插入飞书文档 → 创建提示词文档
 ```
@@ -136,7 +139,9 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 ## 输出检查清单
 
 每篇教程输出前，确认：
-- [ ] 正式写教程前已弹出模式选择，让用户选择教程生成 / 需求梳理 / 参考飞书链接学习 / 自定义模式，并在用户回复前没有继续执行后续步骤
+- [ ] 正式写教程前已弹出模式选择，让用户选择快速生成 / 标准诊断 / 深度访谈 / 参考学习 / 修改已有飞书文档 / 自定义模式，并在用户回复前没有继续执行后续步骤
+- [ ] 若运行环境支持选项式提问，已给出可点击方案卡：推荐项第一位，每个选项有理由；不支持时才用编号列表
+- [ ] 已判断是否需要深度访谈；简单任务没有强行拉长，复杂或不清晰任务已按深度访谈模式逐轮澄清
 - [ ] 已完成项目类型判断：单篇教程 / 小合集 / Wiki 课程 / 项目实战文 / 工具操作教程 / 部署交付教程 / 线下课讲义 / 参考文档复刻
 - [ ] 已用老师视角和产品经理视角做项目级需求诊断
 - [ ] 已覆盖项目目标、学员画像、课程目标、内容边界、素材来源、审美表达、图文互动、发布交付、风险验收 9 个维度；如有缺口，已标注默认判断或待确认项
@@ -185,7 +190,8 @@ description: Generate structured, plain-language Feishu tutorial drafts from kno
 - [ ] 已生成独立的 img2.0 生图提示词文档；如实际发布，提示词文档也作为独立文档或附件交付
 - [ ] 对比内容使用表格、分栏、对比图或高亮块显著显示
 - [ ] 飞书排版四件套已使用；如实际创建飞书文档，使用 DocxXML 富文本块而不是普通 Markdown 文件上传
-- [ ] 已实际执行 `lark-cli docs +create --api-version v2` 创建飞书云文档；除非用户明确要求只生成草稿
+- [ ] 已按场景实际执行飞书 CLI：首次发布使用 `lark-cli docs +create --api-version v2`；修改已有文档使用 `lark-cli docs +update --api-version v2`；除非用户明确要求只生成草稿
+- [ ] 如果用户提供了已有 docx 链接，或本轮已经创建过飞书文档，后续修改已使用 `lark-cli docs +update --api-version v2` 更新原文档，没有默认新建链接
 - [ ] 飞书正文不是普通 Markdown 导入，必须能看到高亮块、表格、代码块、检查项、分栏/画板等富文本块
 - [ ] 场外文档出处置顶
 - [ ] 练习可在 5 分钟内验证

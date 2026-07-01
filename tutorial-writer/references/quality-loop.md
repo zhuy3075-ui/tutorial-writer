@@ -62,8 +62,9 @@
 
 ### 飞书发布 Loop
 
-- 已使用 `lark-cli docs +create --api-version v2` 创建飞书云文档。
+- 已按场景使用飞书 CLI：首次发布用 `lark-cli docs +create --api-version v2`，修改已有文档用 `lark-cli docs +update --api-version v2`。
 - 返回链接是 `/docx/`。
+- 如果是修改已有文档，验证结果仍指向原 docx 链接或 token，没有意外新建链接。
 - 已用 `docs +fetch --api-version v2` 验证标题、富文本块和图片存在。
 - DocxXML 中有 callout、table、ul/ol、checkbox、grid/whiteboard/image/pre 等适用块。
 - 如有 img2.0 图片，图片已插入正文对应位置。

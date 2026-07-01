@@ -2,15 +2,35 @@
 
 ## 输出形态硬规则
 
-默认输出是**已创建成功的飞书云文档（docx）**，不是本地草稿，也不是 Drive 中的普通 Markdown 文件。
+默认输出是**已创建或已更新成功的飞书云文档（docx）**，不是本地草稿，也不是 Drive 中的普通 Markdown 文件。
 
 但“飞书云文档”不等于所有内容都放进一篇文档。先根据 `course-planning.md` 判断是单文档、多文档，还是 Wiki 知识库结构。
 
-当用户说“使用飞书 CLI”“上传到飞书文档”“做成飞书教程”时，必须实际执行：
+### 创建 / 更新决策
+
+先判断本轮是否已有目标 docx。
+
+| 场景 | 默认动作 | 命令 |
+| --- | --- | --- |
+| 没有飞书 docx 链接，需要首次发布教程 | 新建文档 | `docs +create` |
+| 用户提供了已有 docx 链接 | 更新原文档 | `docs +update` |
+| 当前对话刚刚创建过 docx，用户说修改、优化、调整、继续 | 更新原文档 | `docs +update` |
+| 用户明确说新建副本、另存一版、重新生成一份 | 新建文档 | `docs +create` |
+
+当用户说“使用飞书 CLI”“上传到飞书文档”“做成飞书教程”，且没有可更新的原文档时，必须实际执行：
 
 ```bash
 lark-cli docs +create --api-version v2 --as user --content @./tutorial.xml --json
 ```
+
+当用户说“修改这个飞书文档”“在原链接上改”“继续优化刚刚生成的教程”，或上下文中已有本次目标 docx 链接时，必须先读取原文档，再更新原文档：
+
+```bash
+lark-cli docs +fetch --api-version v2 --doc "<docx链接或token>" --doc-format xml --detail with-ids --json
+lark-cli docs +update --api-version v2 --doc "<docx链接或token>" --command block_replace --block-id "<block_id>" --content @./patch.xml --json
+```
+
+优先使用 `block_replace`、`block_insert_after`、`str_replace` 等精确更新。`overwrite` 会清空文档，可能丢失图片、评论、画板或手工修改，只有用户明确要求“全文覆盖 / 重建原文档”并接受风险时才使用。
 
 仅当用户明确说“上传 Markdown 文件 / 原生 .md 文件 / Drive 普通文件”时，才使用：
 
@@ -24,7 +44,7 @@ lark-cli markdown +create --as user --file ./tutorial.md
 lark-cli drive +import --type docx --as user --file ./tutorial.md --json
 ```
 
-教程正文必须优先使用 `docs +create` + DocxXML，因为它能稳定表达高亮块、表格、代码块、检查项、分栏和画板。不要为了省事用 `--doc-format markdown` 上传正文；Markdown 导入通常无法呈现足够好看的高亮块和富文本结构。
+教程正文必须优先使用 DocxXML，因为它能稳定表达高亮块、表格、代码块、检查项、分栏和画板。新建用 `docs +create`，修改已有文档用 `docs +update`。不要为了省事用 `--doc-format markdown` 上传正文；Markdown 导入通常无法呈现足够好看的高亮块和富文本结构。
 
 验收时必须确认返回链接包含 `/docx/`。如果返回 `/file/` 或只有 `.md` 文件 token，说明上传形态错了。
 
@@ -34,8 +54,8 @@ lark-cli drive +import --type docx --as user --file ./tutorial.md --json
 
 除非用户明确要求只要草稿，否则不能停在“这里是上传命令”。必须执行：
 
-1. `lark-cli docs +create --api-version v2 ...`
-2. `lark-cli docs +fetch --api-version v2 ...` 验证
+1. 首次发布时执行 `lark-cli docs +create --api-version v2 ...`；修改已有文档时执行 `lark-cli docs +update --api-version v2 ...`
+2. `lark-cli docs +fetch --api-version v2 ...` 验证；修改已有文档时必须确认链接仍是原 docx
 3. 如有图片，执行 `lark-cli docs +media-insert ...`
 4. 返回飞书文档链接
 
@@ -601,6 +621,7 @@ graph TD
 - 章节之间用 `<hr/>` 拉开视觉节奏。
 - 表格表头使用 `background-color="light-gray"`。
 - 如果文档较长，先 `docs +create` 创建骨架，再用 `docs +update` 分段追加。
+- 如果是修改已有文档，先 `docs +fetch --detail with-ids` 获取目标 block，再用 `docs +update` 精确替换或插入；不要默认创建新文档。
 - 标题用真实 `<h1>` / `<h2>` / `<h3>` 标签，序号用 `<ol>`，不要用纯文本空格模拟层级。
 - 对比内容必须用 `<grid>`、`<table>`、`<callout>` 或 `<whiteboard>` 显著呈现。
 - 只使用已被 `lark-cli docs +create --api-version v2` 支持的标签。
@@ -662,7 +683,7 @@ graph TD
 
 ## 发布验证
 
-用飞书 CLI 创建后，必须做最小验证：
+用飞书 CLI 创建或更新后，必须做最小验证：
 
 ```bash
 lark-cli docs +fetch --api-version v2 --doc "https://xxx.feishu.cn/docx/..." --doc-format xml --scope full --json
@@ -672,6 +693,7 @@ lark-cli docs +fetch --api-version v2 --doc "https://xxx.feishu.cn/docx/..." --d
 
 - 返回 `ok: true`
 - 链接是 `/docx/`
+- 如果是修改已有文档，返回链接或 token 仍是原文档，不是新建文档
 - XML 中能看到 `<title>`
 - XML 中能看到 `<callout>`、`<table>`、`<pre>`、`<checkbox>`
 - XML 中能看到 `<whiteboard>`，或至少在文档中明确标注了要插入的画板位
